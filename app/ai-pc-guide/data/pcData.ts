@@ -1,56 +1,163 @@
 export type Rating = "◎" | "○" | "△" | "×";
 export type OverallRating = "S" | "A+" | "A" | "A-" | "B+" | "B" | "B-" | "C+";
 
-export interface PcData {
+export type UseCaseId =
+  | "api-cost"
+  | "mac-start"
+  | "win-gpu-budget"
+  | "image-generation"
+  | "local-llm-rag"
+  | "portability"
+  | "business-ai";
+
+export interface DeviceSource {
+  label: string;
+  url: string;
+}
+
+export interface DeviceData {
   id: string;
   name: string;
-  shortName: string;
   price: string;
-  priceNum: number; // for sorting
-  category: "mac" | "windows-desktop" | "windows-laptop" | "budget";
-  tagline: string;
-  overview: string;
+  priceNote?: string; // e.g. "国内構成・価格は要確認"
+  catchcopy: string;
+  cpu: string;
+  gpu: string;
+  vram: string;
+  memory: string;
+  storage: string;
+  weight: string;
+  suitableFor: string[];
   strengths: string[];
   weaknesses: string[];
-  forWho: string;
-  notForWho: string;
-  buyNote: string;
+  cautions: string[];
+  sources: DeviceSource[];
   ratings: {
-    priceValue: Rating;     // 価格の安さ
-    beginner: Rating;       // 初心者向け
-    apiDev: Rating;         // API開発
-    python: Rating;         // Python学習
-    rag: Rating;            // RAG開発
-    localLLM: Rating;       // ローカルLLM
-    imageGen: Rating;       // 画像生成AI
-    docker: Rating;         // Docker開発
-    powerBI: Rating;        // Power BI / Excel連携
-    portability: Rating;    // 携帯性
-    battery: Rating;        // バッテリー
-    silent: Rating;         // 静音性
-    heat: Rating;           // 発熱の少なさ
-    costPerf: Rating;       // コスパ
-    expandable: Rating;     // 拡張性
+    priceValue: Rating;
+    beginner: Rating;
+    apiDev: Rating;
+    python: Rating;
+    rag: Rating;
+    localLLM: Rating;
+    imageGen: Rating;
+    docker: Rating;
+    powerBI: Rating;
+    portability: Rating;
+    battery: Rating;
+    silent: Rating;
+    heat: Rating;
+    costPerf: Rating;
+    expandable: Rating;
   };
   overall: OverallRating;
   comment: string;
 }
 
-export const pcList: PcData[] = [
+export interface UseCaseData {
+  id: UseCaseId;
+  title: string;
+  description: string;
+  deviceIds: string[];
+  conclusion: string;
+}
+
+export const useCases: UseCaseData[] = [
   {
-    id: "mba13-m5",
+    id: "api-cost",
+    title: "コスパ重視でClaude / ChatGPT API開発をしたい",
+    description: "Claude / ChatGPT APIを使った開発が中心なら、高額なGPU搭載ノートは必須ではありません。まずは16GBメモリ・512GB SSD以上を確保すれば、Python学習、Webアプリ開発、業務改善AIには十分対応できます。",
+    deviceIds: ["low-windows-16-512", "macbook-air-13-m5", "macbook-air-15-m5"],
+    conclusion: "API開発中心ならGPUは必須ではない。最初は16GBメモリ・512GB SSD以上を優先する。",
+  },
+  {
+    id: "mac-start",
+    title: "MacBookでAI開発を始めたい",
+    description: "MacBookは、Claude Code、Python、Webアプリ開発、API開発との相性が良く、初心者にも扱いやすい選択肢です。ただし、CUDAを使う画像生成AIやNVIDIA GPU前提の機械学習には向きません。",
+    deviceIds: ["macbook-air-13-m5", "macbook-air-15-m5", "macbook-pro-14-m5-pro"],
+    conclusion: "Mac派の初心者はMacBook Air 13インチ M5が最も無難。長く本格的に使うならMacBook Pro 14インチ M5 Pro。",
+  },
+  {
+    id: "win-gpu-budget",
+    title: "WindowsでGPUも試したいが、予算は抑えたい",
+    description: "WindowsでGPUも試したいなら、RTX 5060搭載ノートが低〜中価格帯の現実的な候補です。本格的なローカルLLMには制約がありますが、CUDA入門、軽めの画像生成AI、RAG開発には使えます。",
+    deviceIds: ["lenovo-loq-rtx5060", "asus-tuf-v16-rtx5060", "msi-cyborg-katana-rtx5060"],
+    conclusion: "低〜中価格帯でGPUも試したいならRTX 5060搭載ノートが現実的。ただしVRAM 8GB級の構成が多いため、大規模ローカルLLMには過度な期待をしない。",
+  },
+  {
+    id: "image-generation",
+    title: "Stable Diffusionなど画像生成AIをやりたい",
+    description: "画像生成AIを自分のPCで動かしたい場合は、NVIDIA RTX GPUを搭載したWindowsノートが有利です。最低でもRTX 5060、できればRTX 5070 Laptop以上を目安にしてください。",
+    deviceIds: ["galleria-zl7c-r57-6a", "asus-tuf-rtx5070", "hp-omen-lenovo-legion-rtx5070"],
+    conclusion: "画像生成AIをやりたいなら、GPUなしノートやMacBook Airは避ける。RTX 5060以上、可能ならRTX 5070 Laptop以上を選ぶ。",
+  },
+  {
+    id: "local-llm-rag",
+    title: "ローカルLLMやRAGを本格的に試したい",
+    description: "ローカルLLMは、GPU性能、VRAM、メモリ容量に大きく左右されます。ノートPCでも試せますが、大規模モデルには限界があります。RAG開発や小規模ローカルLLMなら、32GBメモリ以上を推奨します。",
+    deviceIds: ["galleria-zl7c-r57-6a", "hp-omen-max-16-rtx5080", "macbook-pro-14-m5-pro"],
+    conclusion: "ローカルLLMを重視するなら、WindowsはRTX 5070 Laptop以上、MacはM5 Pro以上・大容量メモリ構成を検討する。ただし、本格的な大規模LLMはノートPCだけで完結させようとしない。",
+  },
+  {
+    id: "portability",
+    title: "持ち運び・バッテリー・静音性を重視したい",
+    description: "持ち運び、バッテリー、静音性を重視するなら、MacBook Airが非常に強い候補です。GPUも欲しい場合は、ROG Zephyrus G14のような薄型GPUノートも候補になりますが、価格は上がります。",
+    deviceIds: ["macbook-air-13-m5", "macbook-air-15-m5", "rog-zephyrus-g14-rtx5060"],
+    conclusion: "静音性・バッテリー重視ならMacBook Air。GPUも欲しいなら薄型GPUノートを検討するが、発熱・価格・バッテリーの妥協は必要。",
+  },
+  {
+    id: "business-ai",
+    title: "Power BI / Excel / 業務改善AIをやりたい",
+    description: "Power BI DesktopやExcel連携を重視するなら、Windowsノートが有利です。GPUは必須ではありません。API開発、Excel自動化、Power BI、Pythonを使うなら、まず16GBメモリ以上を確保してください。",
+    deviceIds: ["low-windows-16-512", "lenovo-loq-rtx5060", "macbook-air-13-m5"],
+    conclusion: "Power BI / Excel / 業務改善AIが中心ならWindowsを優先。GPUよりもメモリ16GB以上、SSD 512GB以上を重視する。",
+  },
+];
+
+export const deviceList: DeviceData[] = [
+  {
+    id: "low-windows-16-512",
+    name: "低価格Windowsノート 16GB / 512GB",
+    price: "約10〜15万円前後",
+    catchcopy: "API開発と業務改善AIなら最安で始められる",
+    cpu: "Core i5 / Ryzen 5 / Core Ultra 5級",
+    gpu: "内蔵GPU",
+    vram: "共有メモリ",
+    memory: "16GB推奨",
+    storage: "512GB SSD以上推奨",
+    weight: "1.3〜1.8kg前後",
+    suitableFor: ["Claude API / ChatGPT API開発", "Python学習", "Excel自動化", "Power BI", "軽めのWebアプリ開発"],
+    strengths: ["価格が安い", "Windows業務ツールと相性が良い", "API開発やPython学習には十分", "Power BI Desktopを使いやすい"],
+    weaknesses: ["NVIDIA GPUがない", "画像生成AIには不向き", "ローカルLLMには不向き", "Docker多用ではメモリ不足になりやすい"],
+    cautions: ["8GBメモリは避ける", "256GB SSDは避ける", "画像生成AIやローカルLLM目的で買わない"],
+    sources: [
+      { label: "PyTorch 公式：CPU / CUDA導入", url: "https://pytorch.org/get-started/locally/" },
+    ],
+    ratings: {
+      priceValue: "◎", beginner: "○", apiDev: "◎", python: "◎", rag: "△",
+      localLLM: "×", imageGen: "×", docker: "△", powerBI: "◎",
+      portability: "○", battery: "○", silent: "○", heat: "○", costPerf: "○", expandable: "×",
+    },
+    overall: "C+",
+    comment: "API開発・Power BI・Excel自動化用。ローカルAI用途は割り切り",
+  },
+  {
+    id: "macbook-air-13-m5",
     name: "MacBook Air 13インチ M5",
-    shortName: "Air 13 M5",
     price: "約18万円前後〜",
-    priceNum: 180000,
-    category: "mac",
-    tagline: "AI開発の入門なら最も失敗しにくい軽量Mac",
-    overview: "ChatGPTやClaude APIを使ったAIアプリ開発、Python学習、Web開発を始めたい人に向く軽量ノート。軽さ・静音性・バッテリーが強く、初心者の最初の1台として扱いやすい一方、NVIDIA GPUがないため画像生成AIやローカルLLMには不向きです。",
-    strengths: ["軽くて持ち運びやすい", "静音性とバッテリーが非常に強い", "API開発・Python学習・Web開発には十分"],
-    weaknesses: ["CUDA非対応", "Stable Diffusionや本格ローカルLLMには弱い", "メモリ・ストレージを後から増設できない"],
-    forWho: "AI開発をAPI中心で始めたい人、カフェや外出先で作業したい人。",
-    notForWho: "画像生成AIやローカルLLMを本格的に動かしたい人。",
-    buyNote: "最低でも16GB、可能なら24GBメモリを選ぶ。ストレージは512GB以上推奨。",
+    catchcopy: "AI開発の入門なら最も失敗しにくい軽量Mac",
+    cpu: "Apple M5（10コアCPU）",
+    gpu: "M5内蔵GPU（8〜10コア）",
+    vram: "専用VRAMなし（ユニファイドメモリ共有）",
+    memory: "16GB / 24GB / 32GB",
+    storage: "512GB〜4TB",
+    weight: "約1.23kg",
+    suitableFor: ["Claude Code", "Claude API / ChatGPT API開発", "Python学習", "Next.js / Webアプリ開発", "軽めのRAG", "ブログ・資料作成"],
+    strengths: ["軽くて持ち運びやすい", "静音性とバッテリーが非常に強い（最大18時間）", "API開発・Python学習・Web開発には十分", "初心者が扱いやすい"],
+    weaknesses: ["CUDA非対応", "Stable Diffusionなど画像生成AIには弱い", "本格的なローカルLLMには不向き", "メモリ・ストレージを後から増設できない"],
+    cautions: ["可能なら24GBメモリを選ぶ", "ストレージは512GB以上推奨", "画像生成AI目的ならRTX搭載Windowsノートを検討する"],
+    sources: [
+      { label: "Apple MacBook Air M5 公式仕様", url: "https://www.apple.com/jp/macbook-air/specs/" },
+    ],
     ratings: {
       priceValue: "○", beginner: "◎", apiDev: "◎", python: "◎", rag: "○",
       localLLM: "△", imageGen: "×", docker: "○", powerBI: "△",
@@ -60,19 +167,23 @@ export const pcList: PcData[] = [
     comment: "AI開発初心者の本命。API開発・Python学習なら最も失敗しにくい",
   },
   {
-    id: "mba15-m5",
+    id: "macbook-air-15-m5",
     name: "MacBook Air 15インチ M5",
-    shortName: "Air 15 M5",
     price: "約21〜24万円前後〜",
-    priceNum: 220000,
-    category: "mac",
-    tagline: "大画面で学習・開発・資料作成までこなすMac入門機",
-    overview: "13インチAirの扱いやすさを保ちつつ、画面の広さを重視したモデル。コード、ブラウザ、資料を並べて作業しやすい。AI開発初心者には十分ですが、GPUを使う生成AI用途ではWindows RTX機に劣ります。",
-    strengths: ["画面が広く作業しやすい", "バッテリーと静音性が強い", "学習、API開発、資料作成に向く"],
-    weaknesses: ["13インチより高い", "携帯性は13インチに劣る", "CUDA非対応"],
-    forWho: "1台で学習・開発・ブログ/LP作成・資料作成までしたい人。",
-    notForWho: "軽さ最優先の人、画像生成AI重視の人。",
-    buyNote: "大画面が必要なければ13インチで十分。メモリは24GB以上が安心。",
+    catchcopy: "大画面で学習・開発・資料作成までこなすMac入門機",
+    cpu: "Apple M5（10コアCPU）",
+    gpu: "M5内蔵GPU（10コア）",
+    vram: "専用VRAMなし（ユニファイドメモリ共有）",
+    memory: "16GB / 24GB / 32GB",
+    storage: "512GB〜4TB",
+    weight: "約1.5kg台",
+    suitableFor: ["Web開発", "API開発", "Python学習", "資料作成", "ブログ・LP制作"],
+    strengths: ["画面が広く作業しやすい", "バッテリーが強い", "静音性が高い", "学習、API開発、資料作成に向く"],
+    weaknesses: ["13インチより高い", "13インチより携帯性は落ちる", "CUDA非対応", "画像生成AIには弱い"],
+    cautions: ["大画面が必要なければ13インチで十分", "メモリは24GB以上が安心", "GPU用途を重視するならWindows RTXノートを検討する"],
+    sources: [
+      { label: "Apple MacBook Air M5 公式仕様", url: "https://www.apple.com/jp/macbook-air/specs/" },
+    ],
     ratings: {
       priceValue: "△", beginner: "◎", apiDev: "◎", python: "◎", rag: "○",
       localLLM: "△", imageGen: "×", docker: "○", powerBI: "△",
@@ -82,19 +193,23 @@ export const pcList: PcData[] = [
     comment: "大画面で学習・開発・資料作成をしたいMac派向け",
   },
   {
-    id: "mbp14-m5",
+    id: "macbook-pro-14-m5",
     name: "MacBook Pro 14インチ M5",
-    shortName: "Pro 14 M5",
     price: "約27〜30万円前後〜",
-    priceNum: 280000,
-    category: "mac",
-    tagline: "Macで長く開発したい人向けの標準Proモデル",
-    overview: "Airより冷却・画面・端子・長時間負荷に強いMac。API開発、Webアプリ、Docker、軽めのRAG開発を快適に進められます。GPU用途ではM5 Pro以上やRTX搭載Windows機に劣ります。",
-    strengths: ["Airより長時間負荷に強い", "画面品質と端子が良い", "開発用Macとしてバランスが良い"],
-    weaknesses: ["価格がAirより高い", "GPU性能はM5 Pro / Maxに劣る", "CUDA非対応"],
-    forWho: "Macで長くAIアプリ開発・Web開発をしたい人。",
-    notForWho: "価格を抑えたい人、画像生成AI中心の人。",
-    buyNote: "予算が許すならM5 Proも比較対象にする。",
+    catchcopy: "Macで長く開発したい人向けの標準Proモデル",
+    cpu: "Apple M5",
+    gpu: "M5内蔵GPU",
+    vram: "専用VRAMなし（ユニファイドメモリ共有）",
+    memory: "16GB / 24GB / 32GB",
+    storage: "512GB〜",
+    weight: "約1.55kg前後",
+    suitableFor: ["API開発", "Webアプリ開発", "Docker", "軽めのRAG", "長時間の開発作業"],
+    strengths: ["MacBook Airより長時間負荷に強い", "画面品質と端子が良い", "開発用Macとしてバランスが良い"],
+    weaknesses: ["Airより価格が高い", "GPU用途ではM5 Pro / MaxやRTX搭載Windowsに劣る", "CUDA非対応"],
+    cautions: ["予算が許すならM5 Proも比較する", "画像生成AI中心ならWindows RTXノートを検討する"],
+    sources: [
+      { label: "Apple MacBook Pro M5 公式仕様", url: "https://www.apple.com/jp/macbook-pro/specs/" },
+    ],
     ratings: {
       priceValue: "△", beginner: "○", apiDev: "◎", python: "◎", rag: "○",
       localLLM: "△", imageGen: "△", docker: "○", powerBI: "△",
@@ -104,19 +219,23 @@ export const pcList: PcData[] = [
     comment: "Airより長時間負荷に強いが、GPU用途ではWindows RTX機に劣る",
   },
   {
-    id: "mbp14-m5pro",
+    id: "macbook-pro-14-m5-pro",
     name: "MacBook Pro 14インチ M5 Pro",
-    shortName: "Pro 14 M5 Pro",
     price: "約35〜40万円前後〜",
-    priceNum: 370000,
-    category: "mac",
-    tagline: "Mac派がAI開発を本格化するなら最有力",
-    overview: "API開発、RAG、Docker、複数環境の同時利用に強いMacBook Pro。軽さと性能のバランスが良く、MacBookでAI開発を長く続けたい人の本命です。ただしCUDAが必要な教材や生成AI環境ではWindows RTX機の方が有利です。",
-    strengths: ["CPU・メモリ・冷却のバランスが良い", "RAGやDocker開発に向く", "携帯性もまだ現実的"],
-    weaknesses: ["高額", "CUDA非対応", "後から増設できない"],
-    forWho: "MacでAIアプリ、SaaS、Web開発、RAG開発を進めたい人。",
-    notForWho: "Stable DiffusionやCUDA前提の開発を中心にしたい人。",
-    buyNote: "24GBでも使えるが、長く使うなら36GB以上を検討。",
+    catchcopy: "Mac派がAI開発を本格化するなら最有力",
+    cpu: "Apple M5 Pro",
+    gpu: "M5 Pro内蔵GPU",
+    vram: "専用VRAMなし（ユニファイドメモリ共有）",
+    memory: "24GB以上推奨",
+    storage: "1TB以上推奨",
+    weight: "約1.60kg前後",
+    suitableFor: ["API開発", "RAG", "Docker", "Webアプリ開発", "複数環境の同時利用", "小規模ローカルLLM検証"],
+    strengths: ["CPU・メモリ・冷却のバランスが良い", "RAGやDocker開発に向く", "携帯性もまだ現実的", "長く使いやすい"],
+    weaknesses: ["高額", "CUDA非対応", "後から増設できない", "同価格帯のRTX機より画像生成AIは弱い"],
+    cautions: ["24GBでも使えるが、長く使うなら36GB以上を検討", "Stable Diffusion中心ならWindows RTXノートを検討する"],
+    sources: [
+      { label: "Apple MacBook Pro M5 公式仕様", url: "https://www.apple.com/jp/macbook-pro/specs/" },
+    ],
     ratings: {
       priceValue: "×", beginner: "○", apiDev: "◎", python: "◎", rag: "◎",
       localLLM: "○", imageGen: "△", docker: "◎", powerBI: "△",
@@ -126,268 +245,274 @@ export const pcList: PcData[] = [
     comment: "Mac派の本命。RAG・Docker・Webアプリ開発まで伸ばしやすい",
   },
   {
-    id: "mbp16-m5max",
-    name: "MacBook Pro 16インチ M5 Max",
-    shortName: "Pro 16 M5 Max",
-    price: "約60万円以上",
-    priceNum: 600000,
-    category: "mac",
-    tagline: "MacでローカルLLMまで見据える最上位候補",
-    overview: "M5 Maxと大容量ユニファイドメモリにより、ローカルLLM推論や動画編集、複数の重い開発作業に強いモデル。Mac環境に統一したい人には強力ですが、価格・重量・CUDA非対応の制約があります。",
-    strengths: ["大容量メモリを選べる", "ローカルLLM推論に比較的強い", "画面が広く作業しやすい"],
-    weaknesses: ["非常に高額", "重い", "NVIDIA CUDA資産は使えない"],
-    forWho: "Macで開発・動画・LLM検証までまとめたい人。",
-    notForWho: "コスパ重視、持ち運び重視、Stable Diffusion中心の人。",
-    buyNote: "初心者には過剰。AI画像生成重視ならRTX 5080 / 5090機も比較する。",
-    ratings: {
-      priceValue: "×", beginner: "△", apiDev: "◎", python: "◎", rag: "◎",
-      localLLM: "◎", imageGen: "○", docker: "◎", powerBI: "△",
-      portability: "△", battery: "○", silent: "○", heat: "○", costPerf: "△", expandable: "×",
-    },
-    overall: "B+",
-    comment: "MacでローカルLLMまで試すなら強いが、初心者には高すぎる",
-  },
-  {
-    id: "galleria-ra7c-r57",
-    name: "GALLERIA RA7C-R57",
-    shortName: "GALLERIA RA7C",
-    price: "244,980円前後",
-    priceNum: 244980,
-    category: "windows-desktop",
-    tagline: "Windows派のAI開発入門で最も狙いやすいRTXデスクトップ",
-    overview: "RTX 5070を搭載したデスクトップで、CUDAを使う画像生成AI、Python、Docker、RAG開発に強い構成です。価格と性能のバランスが良く、WindowsでAI開発を伸ばしたい人の本命候補です。",
-    strengths: ["RTX 5070 / VRAM 12GBでAI用途に強い", "デスクトップなので冷却・拡張性が高い", "同価格帯ノートより性能を出しやすい"],
-    weaknesses: ["持ち運べない", "標準16GBメモリは不足しやすい", "500GB SSDはAI用途では狭い"],
-    forWho: "自宅でAI開発、画像生成AI、ローカルLLMを試したい人。",
-    notForWho: "外出先で作業したい人。",
-    buyNote: "32GBメモリ、1TB SSD以上にカスタムするのが安全。",
-    ratings: {
-      priceValue: "◎", beginner: "○", apiDev: "◎", python: "◎", rag: "○",
-      localLLM: "○", imageGen: "◎", docker: "◎", powerBI: "◎",
-      portability: "×", battery: "×", silent: "△", heat: "△", costPerf: "◎", expandable: "○",
-    },
-    overall: "S",
-    comment: "Windows派・CUDA入門の本命。32GBメモリ化推奨",
-  },
-  {
-    id: "galleria-xa7c-r57c",
-    name: "GALLERIA XA7C-R57-C",
-    shortName: "GALLERIA XA7C",
-    price: "294,980円前後",
-    priceNum: 294980,
-    category: "windows-desktop",
-    tagline: "RTX 5070と1TB SSDで始めやすいAI開発デスクトップ",
-    overview: "RTX 5070と1TB SSDを搭載した、AI開発向けに扱いやすいデスクトップ候補。画像生成AI、Docker、RAG、Python開発まで幅広く対応できます。標準メモリが16GBの場合は、32GB化を推奨します。",
-    strengths: ["RTX 5070搭載でCUDA用途に強い", "1TB SSDでモデルやDockerイメージを置きやすい", "デスクトップなので冷却と拡張性が高い"],
-    weaknesses: ["持ち運べない", "標準メモリ16GBではAI用途で不足しやすい", "周辺機器が別途必要"],
-    forWho: "Windowsで画像生成AIやローカルLLM入門まで試したい人。",
-    notForWho: "外出先でも作業したい人。",
-    buyNote: "32GBメモリ化を強く推奨。",
+    id: "lenovo-loq-rtx5060",
+    name: "Lenovo LOQ 15 / 16 RTX 5060系",
+    price: "約16〜22万円前後",
+    priceNote: "国内構成・価格は要確認",
+    catchcopy: "低〜中価格帯でGPUも試したい人の本命候補",
+    cpu: "Ryzen 7 / Core i7級",
+    gpu: "GeForce RTX 5060 Laptop",
+    vram: "8GB級",
+    memory: "16GB、可能なら32GB",
+    storage: "512GB〜1TB",
+    weight: "約2.3kg前後",
+    suitableFor: ["Python", "Docker", "軽めの画像生成AI", "RAG入門", "CUDA入門"],
+    strengths: ["価格とGPU性能のバランスが良い", "Legion上位モデルより安い", "CUDA入門、RAG、軽めの画像生成AIに使える"],
+    weaknesses: ["バッテリーは弱い", "標準16GB / 512GBだと不足しやすい", "高負荷時は発熱・ファン音が出る", "本格ローカルLLMには制約あり"],
+    cautions: ["32GBメモリ・1TB SSD構成を優先", "VRAM 8GB級のため、大規模LLMには過度な期待をしない", "外出先で長時間バッテリー駆動する用途には向かない"],
+    sources: [
+      { label: "PC Gamer：RTX 5060搭載ノート参考", url: "https://www.pcgamer.com/gaming-laptop-deals/" },
+      { label: "TechRadar：RTX 5060 / 5070 / 5080搭載ノート価格参考", url: "https://www.techradar.com/computing/gaming-laptops/these-retailers-have-the-best-rtx-5060-rtx-5070-and-rtx-5080-gaming-laptop-deals-this-memorial-day-and-yes-they-have-32gb-of-ram" },
+    ],
     ratings: {
       priceValue: "○", beginner: "○", apiDev: "◎", python: "◎", rag: "○",
-      localLLM: "○", imageGen: "◎", docker: "◎", powerBI: "◎",
-      portability: "×", battery: "×", silent: "△", heat: "△", costPerf: "◎", expandable: "○",
+      localLLM: "△", imageGen: "○", docker: "○", powerBI: "◎",
+      portability: "△", battery: "△", silent: "△", heat: "△", costPerf: "◎", expandable: "△",
     },
-    overall: "S",
-    comment: "RTX 5070 + 1TB SSDでAI開発用デスクトップとして扱いやすい",
+    overall: "A-",
+    comment: "低〜中価格帯でGPUも試したい人の最有力候補",
   },
   {
-    id: "galleria-zl7c-r57",
+    id: "asus-tuf-v16-rtx5060",
+    name: "ASUS TUF Gaming / ASUS V16 RTX 5060系",
+    price: "約17〜25万円前後",
+    priceNote: "国内構成・価格は要確認",
+    catchcopy: "コスパ重視でNVIDIA GPUを使いたい人向け",
+    cpu: "Core 7 / Ryzen 7級",
+    gpu: "GeForce RTX 5060 Laptop",
+    vram: "8GB級",
+    memory: "16GB / 32GB",
+    storage: "512GB〜1TB",
+    weight: "2kg前後",
+    suitableFor: ["CUDA入門", "画像生成AI入門", "Docker", "RAG", "Python学習"],
+    strengths: ["RTX 5060搭載機として現実的な価格", "ROGより安くGPU性能を確保しやすい", "画像生成AI入門に使いやすい", "TUF系は比較的堅牢な位置づけ"],
+    weaknesses: ["ROGより画面・筐体品質は控えめ", "発熱・ファン音がある", "バッテリー駆動で高性能は期待しにくい"],
+    cautions: ["16GBより32GB構成を優先", "国内モデルのメモリ、SSD、GPU TGPを確認", "静音・軽量重視ならMacBook Airや薄型GPUノートを検討"],
+    sources: [
+      { label: "ASUS RTX 5060ノート刷新情報（The Verge）", url: "https://www.theverge.com/news/669041/asus-rog-zephyrus-strix-tuf-rtx-5060-laptops-computex-specs-price" },
+      { label: "ASUS V16 RTX 5060 / 32GB 価格参考（TechRadar）", url: "https://www.techradar.com/computing/gaming-laptops/save-usd300-on-the-strong-and-sleek-asus-v16-gaming-laptop-with-an-rtx-5060-and-32gb-of-ram" },
+    ],
+    ratings: {
+      priceValue: "○", beginner: "○", apiDev: "◎", python: "◎", rag: "○",
+      localLLM: "△", imageGen: "○", docker: "○", powerBI: "◎",
+      portability: "△", battery: "△", silent: "△", heat: "△", costPerf: "◎", expandable: "△",
+    },
+    overall: "A-",
+    comment: "GPU性能と価格のバランスが良い中価格帯候補",
+  },
+  {
+    id: "hp-victus-rtx5050-5060",
+    name: "HP Victus 15 / 16 RTX 5050 / 5060系",
+    price: "約14〜20万円前後",
+    priceNote: "国内構成・価格は要確認",
+    catchcopy: "予算を抑えてNVIDIA GPUを試せる入門ゲーミングノート",
+    cpu: "Core i5 / Ryzen 5 / Core i7級",
+    gpu: "GeForce RTX 5050 / RTX 5060 Laptop",
+    vram: "6GB〜8GB級",
+    memory: "16GB推奨",
+    storage: "512GB〜1TB",
+    weight: "2kg前後",
+    suitableFor: ["低予算GPU入門", "Python", "軽めの画像生成AI", "Power BI", "API開発"],
+    strengths: ["価格を抑えてGPU搭載ノートを狙える", "Windows業務用途にも使いやすい", "API開発、Python、軽めの画像生成AIに対応"],
+    weaknesses: ["上位GPUノートより性能は控えめ", "ローカルLLMには制約が大きい", "バッテリーや静音性は一般的な軽量ノートに劣る"],
+    cautions: ["RTX 5050構成は画像生成AIでは入門レベルとして扱う", "可能ならRTX 5060構成を選ぶ", "8GBメモリ構成は避ける"],
+    sources: [
+      { label: "PC Gamer：Lenovo LOQ / HP Victus / RTX 5060候補参考", url: "https://www.pcgamer.com/gaming-laptop-deals/" },
+    ],
+    ratings: {
+      priceValue: "○", beginner: "○", apiDev: "◎", python: "◎", rag: "○",
+      localLLM: "△", imageGen: "△", docker: "○", powerBI: "◎",
+      portability: "△", battery: "△", silent: "△", heat: "△", costPerf: "○", expandable: "△",
+    },
+    overall: "B+",
+    comment: "低予算でGPUを試したい人向け。RTX 5060構成推奨",
+  },
+  {
+    id: "msi-cyborg-katana-rtx5060",
+    name: "MSI Cyborg 15 / Katana 15 RTX 5060系",
+    price: "約15〜25万円前後",
+    priceNote: "国内構成・価格は要確認",
+    catchcopy: "できるだけ安くRTX GPUを試したい人向け",
+    cpu: "Core 5 / Core 7級",
+    gpu: "GeForce RTX 5050 / RTX 5060 Laptop",
+    vram: "8GB級",
+    memory: "16GB",
+    storage: "512GB〜1TB",
+    weight: "約2.1kg前後",
+    suitableFor: ["低予算GPU入門", "Python", "軽めの画像生成AI", "CUDA入門"],
+    strengths: ["安くRTX 5060を狙える", "CUDA入門に使える", "画像生成AIを軽く試せる"],
+    weaknesses: ["画面品質、筐体品質、静音性は上位機に劣る", "標準16GBメモリでは不足しやすい", "高負荷時の発熱・ファン音がある"],
+    cautions: ["32GBメモリ化を検討", "長く快適に使いたいならKatanaや他の上位機も比較する"],
+    sources: [
+      { label: "MSI Cyborg レビュー（GamesRadar）", url: "https://www.gamesradar.com/hardware/laptops/msi-cyborg-review/" },
+      { label: "MSI Cyborg RTX 5060 $899 参考（Creative Bloq）", url: "https://www.creativebloq.com/entertainment/gaming/i-dont-need-a-gaming-laptop-but-if-i-did-an-msi-cyborg-with-rtx-5060-at-usd899-would-do-nicely" },
+    ],
+    ratings: {
+      priceValue: "○", beginner: "○", apiDev: "◎", python: "◎", rag: "○",
+      localLLM: "△", imageGen: "○", docker: "○", powerBI: "◎",
+      portability: "△", battery: "△", silent: "△", heat: "△", costPerf: "○", expandable: "△",
+    },
+    overall: "B+",
+    comment: "安くNVIDIA GPUを試せる候補。メモリ32GB化前提",
+  },
+  {
+    id: "acer-nitro-v-rtx5050-5060",
+    name: "Acer Nitro V 15 / 16 RTX 5050 / 5060系",
+    price: "約13〜20万円前後",
+    priceNote: "国内構成・価格は要確認",
+    catchcopy: "価格重視でGPUノートを探す人向けの比較候補",
+    cpu: "Core i5 / Ryzen 5 / Core i7級",
+    gpu: "GeForce RTX 5050 / RTX 5060 Laptop",
+    vram: "6GB〜8GB級",
+    memory: "16GB推奨",
+    storage: "512GB〜1TB",
+    weight: "2kg前後",
+    suitableFor: ["GPU入門", "Python", "軽めの画像生成AI", "API開発"],
+    strengths: ["低価格帯でGPU搭載構成を狙える", "Python、API開発、軽めの画像生成AIに使える", "コスパ比較用として分かりやすい"],
+    weaknesses: ["上位ゲーミングノートより冷却や画面品質は控えめ", "ローカルLLMには不向き", "バッテリー重視には向かない"],
+    cautions: ["RTX 5050構成は画像生成AI用途では最低ライン", "可能ならRTX 5060構成を選ぶ", "メモリ16GB以上を確認"],
+    sources: [],
+    ratings: {
+      priceValue: "◎", beginner: "○", apiDev: "◎", python: "◎", rag: "○",
+      localLLM: "△", imageGen: "△", docker: "○", powerBI: "◎",
+      portability: "△", battery: "△", silent: "△", heat: "△", costPerf: "○", expandable: "△",
+    },
+    overall: "B",
+    comment: "価格重視のGPU入門候補。構成確認が重要",
+  },
+  {
+    id: "rog-zephyrus-g14-rtx5060",
+    name: "ASUS ROG Zephyrus G14 RTX 5060系",
+    price: "約22〜35万円前後",
+    priceNote: "国内構成・価格は要確認",
+    catchcopy: "持ち運びとGPU性能を両立したい人向け",
+    cpu: "Ryzen 9級",
+    gpu: "GeForce RTX 5060 Laptop",
+    vram: "8GB級",
+    memory: "16GB〜32GB",
+    storage: "1TB推奨",
+    weight: "約1.5kg前後",
+    suitableFor: ["持ち運び + GPU入門", "Web開発", "軽めの画像生成AI", "API開発"],
+    strengths: ["GPU搭載ノートとして軽い", "画面品質が高い構成が多い", "携帯性とGPU性能のバランスが良い"],
+    weaknesses: ["価格が高め", "薄型ゆえ発熱・ファン音に注意", "メモリ増設不可の構成がある"],
+    cautions: ["GPU性能より携帯性重視のモデルとして扱う", "32GBメモリ構成を優先", "コスパ重視ならTUFやLOQも比較する"],
+    sources: [
+      { label: "ASUS ROG Zephyrus G14 RTX 5060 携帯性参考（Windows Central）", url: "https://www.windowscentral.com/hardware/asus/asus-rog-zephyrus-g14-2025-rtx-5060-best-buy-deal" },
+    ],
+    ratings: {
+      priceValue: "×", beginner: "△", apiDev: "◎", python: "◎", rag: "○",
+      localLLM: "△", imageGen: "○", docker: "○", powerBI: "◎",
+      portability: "○", battery: "○", silent: "△", heat: "△", costPerf: "△", expandable: "×",
+    },
+    overall: "B+",
+    comment: "GPU搭載ノートの中では携帯性重視。ただし価格は高め",
+  },
+  {
+    id: "galleria-zl7c-r57-6a",
     name: "GALLERIA ZL7C-R57-6A",
-    shortName: "GALLERIA ZL7C",
-    price: "359,980円前後〜",
-    priceNum: 359980,
-    category: "windows-laptop",
-    tagline: "ノートでもCUDAを使いたい人向けの現実的候補",
-    overview: "RTX 5070 Laptop GPUと32GBメモリを搭載したGPUノート。持ち運べるWindows AI開発環境として使えますが、VRAM 8GBの制約と発熱・ファン音には注意が必要です。",
-    strengths: ["ノートでCUDAが使える", "32GBメモリ標準", "Python、Docker、画像生成AIを試せる"],
-    weaknesses: ["VRAM 8GBでローカルLLMは制約あり", "高負荷時は発熱・ファン音が出る", "バッテリー駆動で高性能は期待しにくい"],
-    forWho: "ノート1台でWindows AI開発をしたい人。",
-    notForWho: "静音性・バッテリー・軽さを重視する人。",
-    buyNote: "RTX 5070 Laptopはデスクトップ版RTX 5070とは性能・VRAMが違う点に注意。",
+    price: "約36万円前後〜",
+    catchcopy: "ノートでも本格的にCUDAを使いたい人向け",
+    cpu: "Core Ultra 7 255HX級",
+    gpu: "GeForce RTX 5070 Laptop",
+    vram: "8GB級",
+    memory: "32GB",
+    storage: "1TB",
+    weight: "2kg台",
+    suitableFor: ["Stable Diffusion", "ComfyUI", "Docker", "RAG", "CUDA開発", "画像生成AI"],
+    strengths: ["国内BTOで買いやすい", "32GBメモリ標準", "RTX 5070 Laptop搭載", "Stable DiffusionやComfyUIに対応しやすい"],
+    weaknesses: ["価格が高い", "重い", "高負荷時は発熱・ファン音がある", "バッテリー駆動で高性能は期待しにくい"],
+    cautions: ["RTX 5070 Laptopはデスクトップ版RTX 5070とは別物", "VRAM 8GB級の制約がある", "ローカルLLMではモデルサイズに注意"],
+    sources: [
+      { label: "NVIDIA GeForce RTX 50 Series Laptop 公式", url: "https://www.nvidia.com/ja-jp/geforce/laptops/50-series/" },
+    ],
     ratings: {
       priceValue: "△", beginner: "○", apiDev: "◎", python: "◎", rag: "◎",
-      localLLM: "△", imageGen: "○", docker: "◎", powerBI: "◎",
+      localLLM: "○", imageGen: "◎", docker: "◎", powerBI: "◎",
       portability: "△", battery: "△", silent: "△", heat: "△", costPerf: "○", expandable: "△",
     },
     overall: "A",
     comment: "ノートでCUDAを使いたい人向け。VRAM 8GB制約に注意",
   },
   {
-    id: "msi-katana-r57",
-    name: "MSI Katana 15 RTX 5070系",
-    shortName: "MSI Katana RTX5070",
-    price: "約18〜25万円前後",
-    priceNum: 220000,
-    category: "windows-laptop",
-    tagline: "低予算でCUDAを試せるゲーミングノート候補",
-    overview: "RTX 5070 Laptop搭載機として比較的安価に狙えるモデル。Python、CUDA、画像生成AIの入門には使えますが、標準メモリ16GBや筐体品質、静音性は上位機に劣ります。",
-    strengths: ["価格を抑えてNVIDIA GPUを使える", "メモリ増設しやすい構成が多い", "画像生成AI入門に使える"],
-    weaknesses: ["VRAM 8GB級で限界がある", "高負荷時のファン音・発熱", "バッテリーは弱い"],
-    forWho: "予算を抑えてStable Diffusionを試したい人。",
-    notForWho: "長く快適に使いたい人、静音重視の人。",
-    buyNote: "16GBモデルは32GBへ増設前提で見る。",
+    id: "asus-tuf-rtx5070",
+    name: "ASUS TUF Gaming RTX 5070系",
+    price: "約22〜30万円前後",
+    priceNote: "国内構成・価格は要確認",
+    catchcopy: "画像生成AIまで視野に入る中価格帯GPUノート",
+    cpu: "Ryzen 9 / Core 7級",
+    gpu: "GeForce RTX 5070 Laptop",
+    vram: "8GB級",
+    memory: "16GB / 32GB",
+    storage: "1TB推奨",
+    weight: "2kg台",
+    suitableFor: ["Stable Diffusion", "ComfyUI", "RAG", "Docker", "画像生成AI"],
+    strengths: ["RTX 5070 Laptopで画像生成AIに強い", "ROGより価格を抑えやすい", "32GB構成ならAI開発に使いやすい"],
+    weaknesses: ["発熱・ファン音がある", "バッテリー駆動には向かない", "国内構成の確認が必要"],
+    cautions: ["16GB構成より32GB構成を優先", "GPU TGPとVRAMを確認", "携帯性重視ならZephyrus系も比較する"],
+    sources: [
+      { label: "ASUS RTX 5060ノート刷新情報（The Verge）", url: "https://www.theverge.com/news/669041/asus-rog-zephyrus-strix-tuf-rtx-5060-laptops-computex-specs-price" },
+      { label: "TechRadar：RTX 5060 / 5070 / 5080搭載ノート価格参考", url: "https://www.techradar.com/computing/gaming-laptops/these-retailers-have-the-best-rtx-5060-rtx-5070-and-rtx-5080-gaming-laptop-deals-this-memorial-day-and-yes-they-have-32gb-of-ram" },
+    ],
     ratings: {
-      priceValue: "○", beginner: "○", apiDev: "◎", python: "◎", rag: "○",
-      localLLM: "△", imageGen: "○", docker: "○", powerBI: "◎",
-      portability: "△", battery: "△", silent: "△", heat: "△", costPerf: "○", expandable: "○",
-    },
-    overall: "B+",
-    comment: "安くNVIDIA GPUを試せる候補。メモリ32GB化前提",
-  },
-  {
-    id: "omen-max16-r58",
-    name: "HP OMEN MAX 16 RTX 5080系",
-    shortName: "OMEN MAX 16",
-    price: "約40〜55万円前後",
-    priceNum: 470000,
-    category: "windows-laptop",
-    tagline: "画像生成AIとローカルAIを狙う高性能Windowsノート",
-    overview: "RTX 5080 / 5090 Laptop構成を選べる高性能ゲーミングノート。Stable DiffusionやローカルLLM検証に向きますが、ファン音・発熱・バッテリーの短さは避けられません。",
-    strengths: ["RTX 5080 / 5090級を選べる", "画像生成AIに強い", "32〜64GB構成を選びやすい"],
-    weaknesses: ["高額", "重く、バッテリーが短い", "高負荷時のファン音が大きい"],
-    forWho: "ノートで本格GPU用途をやりたい人。",
-    notForWho: "静音・軽量・長時間バッテリー重視の人。",
-    buyNote: "GPU名だけでなくVRAM容量とTGPを確認する。",
-    ratings: {
-      priceValue: "×", beginner: "△", apiDev: "◎", python: "◎", rag: "◎",
-      localLLM: "◎", imageGen: "◎", docker: "◎", powerBI: "◎",
-      portability: "△", battery: "×", silent: "△", heat: "△", costPerf: "△", expandable: "△",
-    },
-    overall: "A-",
-    comment: "画像生成AI・ローカルLLM向け。高性能だが重く熱い",
-  },
-  {
-    id: "legion-pro7i-g10",
-    name: "Lenovo Legion Pro 7i Gen 10",
-    shortName: "Legion Pro 7i",
-    price: "約40〜60万円前後",
-    priceNum: 500000,
-    category: "windows-laptop",
-    tagline: "高性能ノートでローカルAIまで攻めたい人向け",
-    overview: "RTX 5080級の高性能GPUを搭載できるプレミアムゲーミングノート。画像生成AI、ローカルLLM、重い開発環境に強い一方で、価格・重量・バッテリー面では妥協が必要です。",
-    strengths: ["RTX 5080級でGPU性能が高い", "冷却性能が高め", "自宅据え置きノートとして強い"],
-    weaknesses: ["高額", "重い", "バッテリー駆動には不向き"],
-    forWho: "デスクトップは置けないが高性能GPUが欲しい人。",
-    notForWho: "初心者、軽量ノートを探している人。",
-    buyNote: "ほぼ据え置き前提。AC電源接続で使うPCと考える。",
-    ratings: {
-      priceValue: "×", beginner: "△", apiDev: "◎", python: "◎", rag: "◎",
-      localLLM: "◎", imageGen: "◎", docker: "◎", powerBI: "◎",
-      portability: "△", battery: "×", silent: "△", heat: "△", costPerf: "△", expandable: "△",
-    },
-    overall: "A-",
-    comment: "高性能ノートでAI用途も強いが、基本は据え置き運用",
-  },
-  {
-    id: "rog-zephyrus-2026",
-    name: "ASUS ROG Zephyrus G14 / G16 2026",
-    shortName: "ROG Zephyrus G14/G16",
-    price: "約45〜60万円前後",
-    priceNum: 520000,
-    category: "windows-laptop",
-    tagline: "高性能GPUと携帯性を両立したい人向け",
-    overview: "薄型・軽量寄りの高性能ゲーミング/クリエイターノート。RTX 5080 / 5090級まで選べる世代は、持ち運べる高性能AI開発機として魅力。ただし国内価格・在庫・発熱の確認が必須です。",
-    strengths: ["高性能GPUと携帯性を両立", "OLEDなど画面品質が高い", "クリエイティブ用途にも向く"],
-    weaknesses: ["高額になりやすい", "薄型ゆえ発熱・ファン音に注意", "国内発売時期・構成確認が必要"],
-    forWho: "持ち運びもGPU性能も妥協したくない人。",
-    notForWho: "コスパ重視の人。",
-    buyNote: "国内モデルのGPU、VRAM、メモリ、TGPを必ず確認する。",
-    ratings: {
-      priceValue: "×", beginner: "△", apiDev: "◎", python: "◎", rag: "◎",
+      priceValue: "△", beginner: "○", apiDev: "◎", python: "◎", rag: "◎",
       localLLM: "○", imageGen: "◎", docker: "◎", powerBI: "◎",
-      portability: "○", battery: "○", silent: "△", heat: "△", costPerf: "△", expandable: "×",
+      portability: "△", battery: "△", silent: "△", heat: "△", costPerf: "○", expandable: "△",
     },
-    overall: "B+",
-    comment: "携帯性とGPU性能の両立型。ただし価格が高い",
+    overall: "A-",
+    comment: "RTX 5070 Laptopで画像生成AIまで狙いやすい",
   },
   {
-    id: "levelinf-r58-laptop",
-    name: "LEVEL∞ RTX 5080 Laptop GPU搭載ノート",
-    shortName: "LEVEL∞ RTX5080",
-    price: "約40万円以上",
-    priceNum: 400000,
-    category: "windows-laptop",
-    tagline: "国内BTOで高性能AI開発ノートを組みたい人向け",
-    overview: "パソコン工房系のBTO高性能ノート。RTX 5080 Laptop GPU構成なら、画像生成AI、RAG、Docker、ローカルLLM検証まで広く使えます。持ち運りより据え置き運用向けです。",
-    strengths: ["国内BTOで構成を選びやすい", "RTX 5080級でAI用途に強い", "32GB以上を選びやすい"],
-    weaknesses: ["重い", "高額", "高負荷時の静音性は期待しにくい"],
-    forWho: "デスクトップは避けたいが高性能GPUが必要な人。",
-    notForWho: "軽量ノートや長時間バッテリーを求める人。",
-    buyNote: "ノートGPUは同じRTX 5080でもデスクトップ版とは違う。",
+    id: "hp-omen-lenovo-legion-rtx5070",
+    name: "HP OMEN / Lenovo Legion RTX 5070以上",
+    price: "約30〜50万円前後",
+    priceNote: "国内構成・価格は要確認",
+    catchcopy: "画像生成AIとローカルAIを狙う高性能Windowsノート",
+    cpu: "Core Ultra 7 / Ryzen 7以上",
+    gpu: "RTX 5070 / RTX 5080 Laptop",
+    vram: "8GB〜16GB級",
+    memory: "32GB推奨",
+    storage: "1TB以上推奨",
+    weight: "2kg台後半",
+    suitableFor: ["画像生成AI", "本格RAG", "ローカルLLM入門", "Docker", "CUDA開発"],
+    strengths: ["GPU性能が高い", "画像生成AIに強い", "32GB以上の構成を選びやすい", "長く使いやすい"],
+    weaknesses: ["高額", "重い", "バッテリーが弱い", "高負荷時のファン音が大きい"],
+    cautions: ["初心者には過剰になりやすい", "静音・携帯性重視の人には向かない", "GPU名だけでなくVRAM容量とTGPを確認する"],
+    sources: [
+      { label: "TechRadar：RTX 5060 / 5070 / 5080搭載ノート価格参考", url: "https://www.techradar.com/computing/gaming-laptops/these-retailers-have-the-best-rtx-5060-rtx-5070-and-rtx-5080-gaming-laptop-deals-this-memorial-day-and-yes-they-have-32gb-of-ram" },
+    ],
     ratings: {
       priceValue: "×", beginner: "△", apiDev: "◎", python: "◎", rag: "◎",
       localLLM: "◎", imageGen: "◎", docker: "◎", powerBI: "◎",
-      portability: "△", battery: "×", silent: "△", heat: "△", costPerf: "△", expandable: "○",
+      portability: "△", battery: "×", silent: "△", heat: "△", costPerf: "△", expandable: "△",
     },
     overall: "A-",
-    comment: "国内BTOで高性能GPUノートを選びたい人向け",
+    comment: "性能は高いが、価格・重さ・発熱を許容できる人向け",
   },
   {
-    id: "budget-windows",
-    name: "低価格Windowsノート 16GB / 512GB",
-    shortName: "低価格Winノート",
-    price: "約10〜15万円前後",
-    priceNum: 120000,
-    category: "budget",
-    tagline: "API開発と業務改善AIなら最安で始められる",
-    overview: "10〜15万円台のGPUなしWindowsノートでも、Python学習、ChatGPT / Claude API開発、Excel自動化、Power BI、軽いRAGなら十分始められます。ローカルLLMや画像生成AIはクラウド利用前提です。",
-    strengths: ["安い", "Power BI / Excelとの相性が良い", "API開発には十分"],
-    weaknesses: ["NVIDIA GPUがない", "画像生成AIは厳しい", "DockerやRAGでメモリ不足になりやすい"],
-    forWho: "業務改善AI、Excel自動化、API開発を始めたい人。",
-    notForWho: "Stable DiffusionやローカルLLMをPC内で動かしたい人。",
-    buyNote: "8GBメモリは避ける。最低16GB、512GB SSDを推奨。",
+    id: "hp-omen-max-16-rtx5080",
+    name: "HP OMEN MAX 16 RTX 5080系",
+    price: "約40〜55万円前後",
+    priceNote: "国内構成・価格は要確認",
+    catchcopy: "画像生成AIとローカルAIを狙う本格派Windowsノート",
+    cpu: "Core Ultra 9 / Ryzen 9級",
+    gpu: "GeForce RTX 5080 Laptop",
+    vram: "16GB級",
+    memory: "32GB〜64GB推奨",
+    storage: "1TB以上",
+    weight: "2kg台後半",
+    suitableFor: ["画像生成AI", "本格RAG", "ローカルLLM", "Docker", "CUDA開発"],
+    strengths: ["GPU性能が高い", "画像生成AIに強い", "ローカルLLMでも比較的余裕がある", "大容量メモリ構成を選びやすい"],
+    weaknesses: ["高額", "重い", "バッテリーが弱い", "高負荷時のファン音が大きい"],
+    cautions: ["初心者には過剰になりやすい", "静音・携帯性重視の人には向かない", "GPU名だけでなくVRAM容量とTGPを確認する"],
+    sources: [
+      { label: "HP OMEN MAX 16 レビュー（Windows Central）", url: "https://www.windowscentral.com/hardware/hp/hp-omen-max-16-2025-review" },
+    ],
     ratings: {
-      priceValue: "◎", beginner: "○", apiDev: "◎", python: "◎", rag: "△",
-      localLLM: "×", imageGen: "×", docker: "△", powerBI: "◎",
-      portability: "○", battery: "○", silent: "○", heat: "○", costPerf: "○", expandable: "×",
+      priceValue: "×", beginner: "△", apiDev: "◎", python: "◎", rag: "◎",
+      localLLM: "◎", imageGen: "◎", docker: "◎", powerBI: "◎",
+      portability: "△", battery: "×", silent: "△", heat: "△", costPerf: "△", expandable: "△",
     },
-    overall: "C+",
-    comment: "API開発・Power BI・Excel自動化用。ローカルAI用途は割り切り",
+    overall: "A-",
+    comment: "高性能だが初心者には過剰。発熱・重量・価格に注意",
   },
-];
-
-// Use-case recommendations
-export interface UseCaseRec {
-  useCase: string;
-  first: string;   // pc id
-  second: string;
-  third: string;
-  reason: string;
-  caution: string;
-}
-
-export const useCaseRecs: UseCaseRec[] = [
-  { useCase: "AI開発初心者", first: "mba13-m5", second: "galleria-ra7c-r57", third: "budget-windows", reason: "API開発・Python学習ならGPUなしでも始められる。Windows派はRTX 5070デスクトップが伸びしろ大", caution: "画像生成やローカルLLMをやるならGPU搭載機を選ぶ" },
-  { useCase: "MacBookで始めたい人", first: "mba13-m5", second: "mbp14-m5pro", third: "mba15-m5", reason: "軽さ重視ならAir、長く使うならPro", caution: "Stable DiffusionやCUDA前提教材には不向き" },
-  { useCase: "予算を抑えたい人", first: "budget-windows", second: "msi-katana-r57", third: "galleria-ra7c-r57", reason: "10〜15万円ならAPI・学習用途、20万円台ならRTXデスクトップが現実的", caution: "8GBメモリ・256GB SSDは避ける" },
-  { useCase: "ローカルLLMを試したい人", first: "galleria-xa7c-r57c", second: "omen-max16-r58", third: "mbp16-m5max", reason: "NVIDIA GPU + VRAMが有利。Macは大容量ユニファイドメモリが強み", caution: "7B〜14B量子化モデルが現実ライン。大規模モデルは過度に期待しない" },
-  { useCase: "Stable Diffusion・画像生成AI", first: "galleria-xa7c-r57c", second: "omen-max16-r58", third: "galleria-zl7c-r57", reason: "CUDA対応NVIDIA GPUが強い。RTX 5070以上推奨", caution: "ノートGPUは同名でもデスクトップより弱い" },
-  { useCase: "持ち運び重視", first: "mba13-m5", second: "mba15-m5", third: "rog-zephyrus-2026", reason: "Airは軽量・静音・電池持ちが強い。ZephyrusはGPU込みで携帯性が高い", caution: "高性能GPUノートは発熱・電源アダプタが重い" },
-  { useCase: "自宅据え置き高性能重視", first: "galleria-xa7c-r57c", second: "levelinf-r58-laptop", third: "omen-max16-r58", reason: "デスクトップは冷却・価格・拡張性で有利", caution: "置き場所と消費電力を考慮" },
-  { useCase: "Power BI / Excel / 業務改善AI", first: "budget-windows", second: "galleria-ra7c-r57", third: "mba13-m5", reason: "Power BI DesktopはWindowsが有利。API連携・Excel自動化ならGPU不要", caution: "MacはPower BI Desktop用途に不利" },
-  { useCase: "コスパ重視", first: "galleria-ra7c-r57", second: "msi-katana-r57", third: "mba13-m5", reason: "RTX 5070デスクトップはCUDA用途のコスパが高い", caution: "RA7Cは32GBメモリ・1TB SSDへの変更推奨" },
-  { useCase: "将来的に本格AI開発まで", first: "galleria-xa7c-r57c", second: "mbp14-m5pro", third: "omen-max16-r58", reason: "RAG、Docker、画像生成、ローカルLLMまで広げやすい", caution: "本格的な学習用途はクラウドGPU併用が現実的" },
-];
-
-// Budget recommendations
-export interface BudgetRec {
-  budget: string;
-  pcName: string;
-  priceRange: string;
-  config: string;
-  canDo: string;
-  difficult: string;
-  bestChoice: string;
-  caution: string;
-}
-
-export const budgetRecs: BudgetRec[] = [
-  { budget: "10万円前後", pcName: "低価格Windowsノート", priceRange: "約10〜12万円", config: "16GBメモリ / 512GB SSD / Core i5・Ryzen 5級", canDo: "Python学習、API開発、Excel自動化、軽いRAG", difficult: "ローカルLLM、画像生成AI", bestChoice: "GPU用途を捨てて学習・APIに集中", caution: "8GBメモリは避ける" },
-  { budget: "15万円前後", pcName: "MacBook Air 13インチ M5 または低価格Windows上位", priceRange: "約15〜18万円", config: "16GBメモリ / 512GB SSD以上", canDo: "API開発、Webアプリ、Python、Claude / ChatGPT API", difficult: "CUDA、Stable Diffusion", bestChoice: "初心者はAir、業務改善はWindows", caution: "MacはPower BIに弱い" },
-  { budget: "20万円前後", pcName: "MSI Katana 15 RTX 5070系", priceRange: "約18〜25万円", config: "RTX 5070 Laptop / 16GB以上 / 1TB", canDo: "CUDA入門、画像生成AI入門", difficult: "静音性、バッテリー、大規模LLM", bestChoice: "安くGPUを試すなら候補", caution: "32GBメモリ増設前提" },
-  { budget: "25万円前後", pcName: "GALLERIA RA7C-R57", priceRange: "244,980円前後", config: "RTX 5070 / 32GB推奨 / 1TB推奨", canDo: "画像生成AI、RAG、Docker、ローカルLLM入門", difficult: "持ち運び", bestChoice: "Windows AI開発の最有力コスパ", caution: "標準構成はメモリ・SSD強化推奨" },
-  { budget: "30万円前後", pcName: "MacBook Pro 14インチ M5 / RTX 5070上位デスクトップ", priceRange: "約27〜35万円", config: "Macは24GB以上、Windowsは32GB / 1TB", canDo: "本格API開発、RAG、複数開発環境", difficult: "MacはCUDA、Windowsノートは発熱", bestChoice: "Mac派はPro、Windows派はRTXデスクトップ", caution: "用途で完全に分かれる" },
-  { budget: "40万円前後", pcName: "GALLERIA XA7C-R57-C / GALLERIA ZL7C-R57-6A", priceRange: "約36〜40万円", config: "RTX 5070 / 32GB / 1TB", canDo: "Stable Diffusion、RAG、Docker、ローカルLLM", difficult: "大規模LLM、長時間バッテリー", bestChoice: "デスクトップならXA7C、ノートならZL7C", caution: "ノートのVRAM 8GBに注意" },
-  { budget: "50万円以上", pcName: "HP OMEN MAX 16 / Legion Pro 7i / MacBook Pro 16インチ M5 Max", priceRange: "約50万円〜", config: "RTX 5080 / 5090、またはM5 Max 64GB以上", canDo: "画像生成AI、ローカルLLM、動画・開発併用", difficult: "コスパ、携帯性、発熱", bestChoice: "高性能重視ならRTX、Mac統一ならM5 Max", caution: "初心者には過剰になりやすい" },
 ];
