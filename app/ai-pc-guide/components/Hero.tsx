@@ -1,71 +1,57 @@
 "use client";
 
 export default function Hero() {
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
-    <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white py-16 px-4">
+    <section className="bg-gradient-to-br from-slate-900 to-blue-950 py-16 px-4" id="top">
       <div className="max-w-5xl mx-auto">
-        <div className="mb-4">
-          <span className="inline-block bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full mb-4">
-            AI開発初心者向けガイド 2024-2025年版
-          </span>
-        </div>
-        <h1 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
-          AI開発用PCおすすめ比較
-          <span className="block text-blue-400 mt-2">初心者が失敗しない選び方</span>
-        </h1>
-        <p className="text-slate-300 text-lg md:text-xl mb-8 max-w-3xl leading-relaxed">
-          「MacBook Airで足りるの？」「GPUは必要？」「予算はどれくらい？」
-          AI開発を始めたい初心者が迷いやすいPC選びの疑問に、用途・予算・優先度の観点からわかりやすく答えます。
-        </p>
-
-        {/* 結論ボックス */}
-        <div className="bg-slate-700/60 border border-slate-600 rounded-2xl p-6 mb-8">
-          <p className="text-blue-400 font-semibold text-sm uppercase tracking-wider mb-3">
-            ─ まず結論から
+        <div className="text-center mb-10">
+          <p className="text-blue-400 text-sm font-semibold uppercase tracking-widest mb-3">2026年5月版</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">
+            AI開発用PC おすすめ比較
+          </h1>
+          <p className="text-slate-300 text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
+            AI開発用PCは、「API開発中心」か「ローカルAI中心」かで選び方が大きく変わります。
+            ChatGPTやClaude APIを使ったWebアプリ開発、Python学習、業務改善AIなら、MacBook Airや低価格Windowsノートでも十分始められます。
+            一方で、Stable Diffusionなどの画像生成AIや、ローカルLLMをPC内で動かしたい場合は、NVIDIA RTX GPUを搭載したWindows PCを選ぶべきです。
           </p>
-          <ul className="space-y-3">
-            <li className="flex items-start gap-3">
-              <span className="text-green-400 text-xl mt-0.5">✓</span>
-              <span className="text-slate-200">
-                <strong className="text-white">API中心・学習中心なら</strong>
-                、MacBook Airでも十分に始められます
-              </span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span className="text-green-400 text-xl mt-0.5">✓</span>
-              <span className="text-slate-200">
-                <strong className="text-white">ローカルLLMや画像生成を本格的にやるなら</strong>
-                、NVIDIA GPU搭載のWindowsマシンが有利です
-              </span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span className="text-green-400 text-xl mt-0.5">✓</span>
-              <span className="text-slate-200">
-                <strong className="text-white">初心者は「今やること」と「半年後にやりたいこと」を分けて</strong>
-                、用途と予算を整理するのが失敗しないコツです
-              </span>
-            </li>
-          </ul>
         </div>
 
-        {/* CTA */}
-        <div className="flex flex-wrap gap-3">
-          <button
-            onClick={() => scrollTo("comparison")}
-            className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
-          >
-            おすすめPCを比較する →
-          </button>
-          <button
-            onClick={() => scrollTo("guide")}
-            className="bg-slate-700 hover:bg-slate-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors border border-slate-500"
-          >
-            用途別の選び方を見る
-          </button>
+        {/* 3 top picks */}
+        <div className="grid md:grid-cols-3 gap-4 mb-10">
+          {[
+            { label: "Mac派の本命", name: "MacBook Air 13インチ M5", desc: "API開発・Python学習なら最も失敗しにくい", price: "約18万円前後〜", color: "border-blue-500", badge: "bg-blue-600" },
+            { label: "Windows派の本命", name: "GALLERIA RA7C-R57", desc: "RTX 5070でCUDA・画像生成AI・ローカルLLM入門に強い", price: "244,980円前後", color: "border-green-500", badge: "bg-green-600" },
+            { label: "画像生成AI派の本命", name: "GALLERIA XA7C-R57-C", desc: "RTX 5070 + 1TB SSDでAI開発用デスクトップとして扱いやすい", price: "294,980円前後", color: "border-purple-500", badge: "bg-purple-600" },
+          ].map((pick) => (
+            <div key={pick.name} className={`bg-slate-800 rounded-2xl p-5 border-2 ${pick.color}`}>
+              <span className={`inline-block ${pick.badge} text-white text-xs font-bold px-2 py-1 rounded-full mb-3`}>{pick.label}</span>
+              <p className="text-white font-bold text-lg mb-1">{pick.name}</p>
+              <p className="text-blue-300 text-xs font-semibold mb-2">{pick.price}</p>
+              <p className="text-slate-300 text-sm">{pick.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Price note */}
+        <div className="bg-slate-800 border border-slate-600 rounded-xl px-5 py-3 text-slate-400 text-xs text-center mb-8">
+          価格は2026年5月31日時点の税込目安です。BTO構成、セール、在庫状況により変動します。購入前には必ず公式サイト・販売店で最新価格と構成を確認してください。
+        </div>
+
+        {/* CTA buttons */}
+        <div className="flex flex-wrap justify-center gap-3">
+          {[
+            { label: "比較表を見る →", id: "comparison" },
+            { label: "用途別おすすめ →", id: "usecase" },
+            { label: "予算別おすすめ →", id: "budget" },
+          ].map((btn) => (
+            <button
+              key={btn.id}
+              onClick={() => document.getElementById(btn.id)?.scrollIntoView({ behavior: "smooth" })}
+              className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm"
+            >
+              {btn.label}
+            </button>
+          ))}
         </div>
       </div>
     </section>
