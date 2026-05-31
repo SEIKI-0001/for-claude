@@ -3,32 +3,32 @@
 const conclusions = [
   {
     icon: "📚",
-    title: "まずAI開発を学びたいだけなら",
-    body: "MacBook Airでも十分です。API経由のAI開発、Python学習、LangChainやRAGの実装など、多くの入門ステップはMacBook Airで快適にこなせます。",
+    title: "まずAPI開発・Python学習から始めるなら",
+    body: "MacBook Air M4（16GB / 24GB）でも十分です。API経由のAI開発、Python学習、RAG・LangChainの実装など、多くの入門ステップをMacBook Airで快適にこなせます。",
     highlight: false,
   },
   {
     icon: "⚡",
     title: "ローカルLLM・画像生成を本格的にやるなら",
-    body: "Windows + NVIDIA GPU搭載PCを選びましょう。CUDAが使えることで、多くのAIフレームワークをフル活用でき、ローカル推論の速度が大幅に向上します。",
+    body: "Windows + NVIDIA GPU搭載PC（RTX 40/50シリーズ）を選びましょう。CUDAが使えることで多くのAIフレームワークをフル活用でき、ローカル推論・画像生成の速度が大幅に向上します。",
     highlight: true,
   },
   {
     icon: "🎒",
     title: "持ち運びや静音性を重視するなら",
-    body: "MacBook系が圧倒的に強いです。ファンレスのMacBook Airは無音で動作し、バッテリー持続時間と軽量さは他に類を見ません。",
+    body: "MacBook系が圧倒的に強いです。ファンレスのMacBook Air M4は無音で動作し、バッテリー持続時間と軽量さは他に類を見ません。",
     highlight: false,
   },
   {
     icon: "💡",
-    title: "コスパとGPU性能を重視するなら",
-    body: "Windows機が有利です。同価格帯でより高いGPU性能を得やすく、RTX 4060〜4070搭載ノートは20〜25万円前後で実用的なAI開発環境を構築できます。",
+    title: "AI開発の総合力・コスパを最大化するなら",
+    body: "デスクトップPC（RTX 5070〜5090搭載）が最有力です。VRAM・冷却・拡張性すべてが最高水準で、同予算なら最も高い性能を得られます。",
     highlight: false,
   },
   {
     icon: "🧭",
     title: "初心者が最も失敗しない選び方",
-    body: "「今やること」と「半年後にやりたいこと」を分けて考える。まず学習・APIから始め、本格的なローカルAI開発に移る時点で改めてスペックを検討するのが賢い順序です。",
+    body: "「今やること」と「半年後にやりたいこと」を分けて考える。まず学習・APIから始め、ローカルAI開発に移る時点で改めてスペックを検討するのが賢い順序です。",
     highlight: false,
   },
 ];
@@ -39,7 +39,7 @@ export default function Conclusion() {
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">最終結論</h2>
-          <p className="text-slate-400 text-sm">あなたに合ったPCを選ぶための最後のまとめ</p>
+          <p className="text-slate-400 text-sm">あなたに合ったPCを選ぶための最後のまとめ（2026年版）</p>
         </div>
         <div className="grid md:grid-cols-2 gap-5 mb-8">
           {conclusions.map((c) => (
@@ -68,7 +68,7 @@ export default function Conclusion() {
         <div className="text-center bg-slate-700 rounded-2xl p-8">
           <p className="text-white font-bold text-xl mb-2">まずはAPIから始めよう</p>
           <p className="text-slate-300 text-sm mb-6 max-w-2xl mx-auto">
-            PC選びに悩んだら、まずMacBook Air（メモリ16GB以上）またはメモリ16GB以上のWindowsノートからスタート。
+            PC選びに悩んだら、まずMacBook Air M4（24GB）またはメモリ16GB以上のWindowsノートからスタート。
             API経由でAI開発を学びながら、必要なスペックを見極めていくのが、初心者が失敗しない最も確実なルートです。
           </p>
           <div className="flex flex-wrap justify-center gap-3">

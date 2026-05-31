@@ -1,59 +1,73 @@
 const budgets = [
   {
-    range: "10万円前後",
+    range: "10〜15万円前後",
     icon: "💴",
     color: "border-slate-300",
     headerBg: "bg-slate-100",
     recommendation: "Python学習・API利用中心。まずここから始めよう",
     details: [
-      "ChatGPT / Claude APIを使ったプログラミング学習に十分",
+      "ChatGPT / Claude APIを使ったプログラミング学習・業務自動化に十分",
       "ローカルLLMや画像生成AIは難しいが、API経由なら幅広く試せる",
-      "メモリ16GB・SSD搭載のWindowsノートが候補",
+      "メモリ16GB・SSD搭載のWindowsノート（Core Ultra / Ryzen AI世代）が候補",
       "初心者がまず試すという目的なら十分実用的",
     ],
-    caution: "メモリ8GBモデルは避けること。SSDなしの旧世代モデルも対象外",
+    caution: "メモリ8GBモデルは必ず避けること。ローカルAIを期待しないことが前提",
   },
   {
     range: "15〜20万円",
     icon: "💰",
     color: "border-blue-300",
     headerBg: "bg-blue-50",
-    recommendation: "MacBook AirまたはミドルクラスWindowsノートが候補",
+    recommendation: "MacBook Air M4（16GB / 24GB）が最有力候補",
     details: [
-      "MacBook Air M2/M3（メモリ16GB以上）が最有力候補",
-      "小規模なローカルLLMも試せる（7B量子化モデル）",
-      "開発環境の完成度・静音性・バッテリーで満足感が高い",
-      "WindowsならCore i7 / Ryzen 7 + RTX 4050構成も視野に",
+      "MacBook Air M4（16GB）〜（24GB）がこの価格帯の主役",
+      "API開発・Python学習・RAGの入口・軽いローカルLLM実験まで対応",
+      "静音性・バッテリー・持ち運しやすさで長期満足度が高い",
+      "ローカルLLMは軽量モデルの実験まで。本格運用は厳しい",
     ],
-    caution: "MacBook AirはメモリをあとからADDできないので、16GB以上を最初から選ぶこと",
+    caution: "MacBook AirはメモリをあとADDできないため16GBか24GBかを最初に決めること",
   },
   {
-    range: "20〜30万円",
+    range: "20〜25万円",
     icon: "⭐",
     color: "border-green-300",
     headerBg: "bg-green-50",
-    recommendation: "MacBook ProやRTX 4060 / 4070搭載PCで本格的なAI開発環境へ",
+    recommendation: "MacBook Air M4 24GB またはRTX 5060 / 4070搭載Windowsノート",
     details: [
-      "MacBook Pro M3（メモリ18〜36GB）でローカルLLMも本格利用可",
-      "Windows: RTX 4060（VRAM 8GB）〜RTX 4070（VRAM 12GB）搭載ノートが候補",
-      "ローカルLLM・画像生成AIの実用的な速度が期待できる",
-      "1台を長期間使う前提であれば、この価格帯の投資は価値がある",
+      "MacBook Air M4 24GBならAPI開発・Docker・RAGを余裕を持って使える",
+      "Windows: RTX 5060 / 4060（VRAM 8〜12GB）搭載ノートがCUDA入門に",
+      "ローカルLLM（7B量子化）・Stable Diffusionの入門的な利用が現実的に",
+      "「何でも少しずつやりたい人」はこの予算帯が転換点",
     ],
-    caution: "Windows機はVRAM容量を必ず確認。同じGPU名でも構成による違いに注意",
+    caution: "ノートGPUは型番だけでなくVRAM容量とTGPを購入前に確認すること",
   },
   {
-    range: "30万円以上",
+    range: "25〜35万円",
     icon: "🚀",
     color: "border-purple-300",
     headerBg: "bg-purple-50",
-    recommendation: "ローカルLLM・画像生成・長期利用を本格重視した最高性能構成",
+    recommendation: "MacBook Pro M5 / RTX 4080〜5070搭載PC・小型デスクトップ",
     details: [
-      "MacBook Pro M3 Max（36GB〜）で大規模モデルの推論も視野に",
-      "Windows: RTX 4080 / 4090搭載ノートまたはデスクトップが候補",
-      "70B規模のローカルLLMも量子化なしまたは高精度量子化で動作可能",
-      "高解像度・高速の画像生成や動画生成AIも試せる",
+      "MacBook Pro M5（24GB〜36GB）でローカルLLMの中規模モデルも本格運用へ",
+      "Windows: RTX 4080 / 5070（VRAM 12〜16GB）搭載ノートが本格CUDA開発に",
+      "小型デスクトップ＋RTX 5070なら冷却・拡張性でノートより有利",
+      "ローカルLLM・画像生成・PyTorch学習が本格的に射程に入る",
     ],
-    caution: "この価格帯のPCは性能を引き出すための技術的理解も必要。初心者はまず下の価格帯から始めることを推奨",
+    caution: "同じ予算ならデスクトップのほうがGPU性能・冷却面でコスパが高い傾向がある",
+  },
+  {
+    range: "40万円以上",
+    icon: "👑",
+    color: "border-yellow-300",
+    headerBg: "bg-yellow-50",
+    recommendation: "デスクトップPC（RTX 5080/5090）またはMacBook Pro M5 Max",
+    details: [
+      "デスクトップ: RTX 5090（VRAM 32GB）で本格ローカルLLM・画像生成・GPU学習",
+      "MacBook Pro M5 Max（64GB〜128GB）でMac内完結の最高構成",
+      "70B規模のローカルLLMを量子化なしまたは高精度量子化で動作可能",
+      "研究・制作・本業用途でAI開発を長期的にフル活用する前提の投資",
+    ],
+    caution: "CUDA前提の開発ではMac最上位を選んでもWindowsには及ばない点に注意",
   },
 ];
 
@@ -66,7 +80,7 @@ export default function Budget() {
             予算別おすすめPC方針
           </h2>
           <p className="text-slate-500 text-sm">
-            予算に応じた最適な選択肢をまとめました
+            予算に応じた最適な選択肢をまとめました（2026年版）
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-5">
