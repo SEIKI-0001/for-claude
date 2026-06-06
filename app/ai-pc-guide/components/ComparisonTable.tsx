@@ -29,13 +29,9 @@ const cols = [
   { key: "localLLM" as const, label: "ローカルLLM" },
   { key: "imageGen" as const, label: "画像生成AI" },
   { key: "docker" as const, label: "Docker開発" },
-  { key: "powerBI" as const, label: "PowerBI/Excel" },
   { key: "portability" as const, label: "携帯性" },
   { key: "battery" as const, label: "バッテリー" },
-  { key: "silent" as const, label: "静音性" },
-  { key: "heat" as const, label: "発熱の少なさ" },
   { key: "costPerf" as const, label: "コスパ" },
-  { key: "expandable" as const, label: "拡張性" },
 ] as const;
 
 export default function ComparisonTable() {
@@ -43,53 +39,52 @@ export default function ComparisonTable() {
   const notebooks = deviceList;
 
   return (
-    <section className="py-12 px-4 bg-white" id="comparison">
+    <section className="py-14 px-4 bg-white border-b border-slate-100" id="comparison">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">
-            詳しく比較したい人向け：AI開発用ノートPC比較表
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-slate-900 mb-1">
+            詳細比較表
           </h2>
-          <p className="text-slate-500 text-sm max-w-2xl mx-auto">
-            ここまでで自分に近い用途を選べなかった人や、複数の端末を横並びで比較したい人向けに、主要モデルの比較表を用意しました。
-            ただし、初心者は表だけで選ぶのではなく、まず「何をしたいか」から選ぶことをおすすめします。
+          <p className="text-slate-500 text-sm max-w-2xl">
+            複数の端末を横並びで比較したい方向けです。まずは上の「やりたいことから選ぶ」から検討することをおすすめします。
           </p>
           <p className="text-slate-400 text-xs mt-2">◎ 非常に強い ／ ○ 十分使える ／ △ 制約あり ／ × 不向き</p>
         </div>
-        <div className="overflow-x-auto rounded-2xl border border-slate-200 shadow-sm">
+        <div className="overflow-x-auto rounded-xl border border-slate-200">
           <table className="w-full text-xs whitespace-nowrap">
             <thead>
-              <tr className="bg-slate-800 text-white">
-                <th className="px-3 py-3 text-left sticky left-0 bg-slate-800 z-10 min-w-[180px]">端末名</th>
-                <th className="px-3 py-3 text-right whitespace-nowrap">価格目安</th>
+              <tr className="bg-slate-50 border-b border-slate-200">
+                <th className="px-4 py-3 text-left sticky left-0 bg-slate-50 z-10 min-w-[180px] text-slate-500 font-medium">端末名</th>
+                <th className="px-3 py-3 text-right whitespace-nowrap text-slate-500 font-medium">価格目安</th>
                 {cols.map((c) => (
-                  <th key={c.key} className="px-2 py-3 text-center">{c.label}</th>
+                  <th key={c.key} className="px-2 py-3 text-center text-slate-500 font-medium">{c.label}</th>
                 ))}
-                <th className="px-2 py-3 text-center">総合</th>
-                <th className="px-3 py-3 text-left min-w-[200px]">一言コメント</th>
+                <th className="px-2 py-3 text-center text-slate-500 font-medium">総合</th>
+                <th className="px-4 py-3 text-left min-w-[200px] text-slate-500 font-medium">コメント</th>
               </tr>
             </thead>
             <tbody>
               {notebooks.map((device, i) => (
-                <tr key={device.id} className={`border-t border-slate-100 hover:bg-blue-50 transition-colors ${i % 2 === 0 ? "bg-white" : "bg-slate-50"}`}>
-                  <td className={`px-3 py-2 font-semibold text-slate-800 sticky left-0 z-10 ${i % 2 === 0 ? "bg-white" : "bg-slate-50"}`}>
+                <tr key={device.id} className={`border-t border-slate-100 hover:bg-slate-50 transition-colors bg-white`}>
+                  <td className="px-4 py-3 font-medium text-slate-800 sticky left-0 z-10 bg-white">
                     <span>{device.name}</span>
                     {device.priceNote && (
-                      <span className="ml-1 text-amber-600 text-xs">（要確認）</span>
+                      <span className="ml-1 text-amber-500 text-xs">要確認</span>
                     )}
                   </td>
-                  <td className="px-3 py-2 text-right text-slate-600">{device.price}</td>
+                  <td className="px-3 py-3 text-right text-slate-500">{device.price}</td>
                   {cols.map((c) => {
                     const r = device.ratings[c.key] as Rating;
                     return (
-                      <td key={c.key} className="px-2 py-2 text-center">
+                      <td key={c.key} className="px-2 py-3 text-center">
                         <span className={`inline-block rounded px-1.5 text-xs ${ratingColor[r]}`}>{r}</span>
                       </td>
                     );
                   })}
-                  <td className="px-2 py-2 text-center">
-                    <span className={`inline-block rounded px-2 py-0.5 text-xs ${overallColor[device.overall] ?? ""}`}>{device.overall}</span>
+                  <td className="px-2 py-3 text-center">
+                    <span className={`inline-block rounded px-2 py-0.5 text-xs font-semibold ${overallColor[device.overall] ?? ""}`}>{device.overall}</span>
                   </td>
-                  <td className="px-3 py-2 text-slate-600 text-xs leading-relaxed max-w-[220px] whitespace-normal">{device.comment}</td>
+                  <td className="px-4 py-3 text-slate-500 text-xs leading-relaxed max-w-[220px] whitespace-normal">{device.comment}</td>
                 </tr>
               ))}
             </tbody>

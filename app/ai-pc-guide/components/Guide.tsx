@@ -28,27 +28,25 @@ const guideItems = [
 
 export default function Guide() {
   return (
-    <section className="py-12 px-4 bg-slate-50" id="guide">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">
-            AI開発用ノートPCの選び方
-          </h2>
+    <section className="py-14 px-4 bg-white border-b border-slate-100" id="guide">
+      <div className="max-w-3xl mx-auto">
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-slate-900 mb-1">選び方の基本</h2>
           <p className="text-slate-500 text-sm">知っておくべき5つのポイント</p>
         </div>
-        <div className="space-y-5">
+        <div className="space-y-6">
           {guideItems.map((item, i) => (
-            <div key={i} className="bg-white rounded-xl border border-slate-200 p-6">
-              <h3 className="font-bold text-slate-800 mb-2 flex items-start gap-2">
-                <span className="bg-blue-600 text-white text-xs font-bold px-2 py-0.5 rounded-full shrink-0 mt-0.5">{i + 1}</span>
-                {item.title}
-              </h3>
-              <p className="text-slate-600 text-sm leading-relaxed">{item.body}</p>
-              {item.source && (
-                <p className="mt-2 text-xs text-slate-400">
-                  参考：<a href={item.source.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">{item.source.label}</a>
-                </p>
-              )}
+            <div key={i} className="flex gap-5">
+              <div className="shrink-0 w-6 h-6 rounded-full bg-slate-100 text-slate-500 text-xs font-bold flex items-center justify-center mt-0.5">{i + 1}</div>
+              <div>
+                <h3 className="font-semibold text-slate-800 mb-1 text-sm">{item.title}</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">{item.body}</p>
+                {item.source && (
+                  <p className="mt-1.5 text-xs text-slate-400">
+                    参考：<a href={item.source.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">{item.source.label}</a>
+                  </p>
+                )}
+              </div>
             </div>
           ))}
         </div>

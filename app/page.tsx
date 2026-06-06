@@ -40,12 +40,9 @@ export default function Home() {
       <DesktopNote />
       <Conclusion />
 
-      <footer className="bg-slate-900 text-slate-400 text-xs py-8 px-4 text-center">
-        <p className="mb-1">
-          価格は2026年5月31日時点の税込目安です。BTO構成、セール、在庫状況、為替により変動します。
-        </p>
+      <footer className="border-t border-slate-100 text-slate-400 text-xs py-8 px-4 text-center bg-white">
         <p>
-          購入前には必ず公式サイト・販売店で最新価格と構成を確認してください。
+          価格は2026年5月31日時点の税込目安です。BTO構成・セール・在庫状況・為替により変動します。購入前に公式サイト・販売店で最新情報をご確認ください。
         </p>
       </footer>
     </main>

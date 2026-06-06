@@ -12,25 +12,22 @@ const avoidItems = [
 
 export default function AvoidSection() {
   return (
-    <section className="py-12 px-4 bg-red-50" id="avoid">
+    <section className="py-14 px-4 bg-white border-b border-slate-100" id="avoid">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">買って後悔しやすい構成</h2>
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-slate-900 mb-1">買って後悔しやすい構成</h2>
           <p className="text-slate-500 text-sm">
-            AI開発用ノートPCは、価格だけで選ぶと失敗しやすいです。
-            特にメモリ、ストレージ、GPU、VRAM、重量、発熱、バッテリーのバランスを確認してください。
+            価格だけで選ぶと失敗しやすいポイントをまとめました。
           </p>
         </div>
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-2 gap-3">
           {avoidItems.map((item) => (
-            <div key={item.title} className="bg-white rounded-xl border border-red-200 p-5">
-              <div className="flex items-start gap-3">
-                <span className="text-red-500 text-xl shrink-0 mt-0.5">⚠</span>
-                <div>
-                  <h3 className="font-bold text-slate-800 mb-1 text-sm">{item.title}</h3>
-                  <p className="text-slate-600 text-sm leading-relaxed">{item.body}</p>
-                </div>
-              </div>
+            <div key={item.title} className="border border-slate-200 rounded-xl p-5 bg-white hover:border-slate-300 transition-colors">
+              <h3 className="font-semibold text-slate-800 mb-1.5 text-sm flex items-start gap-2">
+                <span className="text-slate-300 shrink-0">—</span>
+                {item.title}
+              </h3>
+              <p className="text-slate-500 text-sm leading-relaxed pl-4">{item.body}</p>
             </div>
           ))}
         </div>
