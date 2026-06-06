@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Hero from "./ai-pc-guide/components/Hero";
+import QuickPick from "./ai-pc-guide/components/QuickPick";
 import UseCaseSelector from "./ai-pc-guide/components/UseCaseSelector";
-import Guide from "./ai-pc-guide/components/Guide";
 import ComparisonTable from "./ai-pc-guide/components/ComparisonTable";
+import Guide from "./ai-pc-guide/components/Guide";
 import AvoidSection from "./ai-pc-guide/components/AvoidSection";
 import DesktopNote from "./ai-pc-guide/components/DesktopNote";
 import Conclusion from "./ai-pc-guide/components/Conclusion";
@@ -33,14 +34,15 @@ export default function Home() {
   return (
     <main>
       <Hero />
+      <QuickPick />
       <UseCaseSelector />
-      <Guide />
       <ComparisonTable />
+      <Guide />
       <AvoidSection />
       <DesktopNote />
       <Conclusion />
 
-      <footer className="border-t border-slate-100 text-slate-400 text-xs py-8 px-4 text-center bg-white">
+      <footer className="border-t border-slate-200 text-slate-400 text-xs py-8 px-4 text-center bg-slate-50">
         <p>
           価格は2026年5月31日時点の税込目安です。BTO構成・セール・在庫状況・為替により変動します。購入前に公式サイト・販売店で最新情報をご確認ください。
         </p>

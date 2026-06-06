@@ -50,26 +50,26 @@ export default function ComparisonTable() {
           </p>
           <p className="text-slate-400 text-xs mt-2">◎ 非常に強い ／ ○ 十分使える ／ △ 制約あり ／ × 不向き</p>
         </div>
-        <div className="overflow-x-auto rounded-xl border border-slate-200">
+        <div className="overflow-x-auto rounded-2xl border border-slate-200 shadow-sm bg-white">
           <table className="w-full text-xs whitespace-nowrap">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="px-4 py-3 text-left sticky left-0 bg-slate-50 z-10 min-w-[180px] text-slate-500 font-medium">端末名</th>
-                <th className="px-3 py-3 text-right whitespace-nowrap text-slate-500 font-medium">価格目安</th>
+              <tr className="bg-slate-900 text-white">
+                <th className="px-4 py-3 text-left sticky left-0 bg-slate-900 z-10 min-w-[180px] font-medium">端末名</th>
+                <th className="px-3 py-3 text-right whitespace-nowrap font-medium">価格目安</th>
                 {cols.map((c) => (
-                  <th key={c.key} className="px-2 py-3 text-center text-slate-500 font-medium">{c.label}</th>
+                  <th key={c.key} className="px-2 py-3 text-center font-medium">{c.label}</th>
                 ))}
-                <th className="px-2 py-3 text-center text-slate-500 font-medium">総合</th>
-                <th className="px-4 py-3 text-left min-w-[200px] text-slate-500 font-medium">コメント</th>
+                <th className="px-2 py-3 text-center font-medium">総合</th>
+                <th className="px-4 py-3 text-left min-w-[200px] font-medium">コメント</th>
               </tr>
             </thead>
             <tbody>
               {notebooks.map((device, i) => (
-                <tr key={device.id} className={`border-t border-slate-100 hover:bg-slate-50 transition-colors bg-white`}>
-                  <td className="px-4 py-3 font-medium text-slate-800 sticky left-0 z-10 bg-white">
+                <tr key={device.id} className={`border-t border-slate-100 hover:bg-blue-50/30 transition-colors ${i % 2 === 0 ? "bg-white" : "bg-slate-50"}`}>
+                  <td className={`px-4 py-3 font-medium text-slate-800 sticky left-0 z-10 ${i % 2 === 0 ? "bg-white" : "bg-slate-50"}`}>
                     <span>{device.name}</span>
                     {device.priceNote && (
-                      <span className="ml-1 text-amber-500 text-xs">要確認</span>
+                      <span className="ml-1 text-amber-600 text-xs bg-amber-50 px-1 rounded">要確認</span>
                     )}
                   </td>
                   <td className="px-3 py-3 text-right text-slate-500">{device.price}</td>

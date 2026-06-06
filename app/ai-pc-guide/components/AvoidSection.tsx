@@ -12,22 +12,23 @@ const avoidItems = [
 
 export default function AvoidSection() {
   return (
-    <section className="py-14 px-4 bg-white border-b border-slate-100" id="avoid">
+    <section className="py-14 px-4 bg-red-50 border-b border-red-100" id="avoid">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-slate-900 mb-1">買って後悔しやすい構成</h2>
-          <p className="text-slate-500 text-sm">
+          <p className="text-xs font-semibold text-red-400 uppercase tracking-widest mb-1">注意事項</p>
+          <h2 className="text-2xl font-bold text-red-700 mb-1">買って後悔しやすい構成</h2>
+          <p className="text-red-500 text-sm">
             価格だけで選ぶと失敗しやすいポイントをまとめました。
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-3">
           {avoidItems.map((item) => (
-            <div key={item.title} className="border border-slate-200 rounded-xl p-5 bg-white hover:border-slate-300 transition-colors">
+            <div key={item.title} className="bg-white border-l-4 border-red-400 rounded-r-xl rounded-l-none pl-4 pr-5 py-4 shadow-sm">
               <h3 className="font-semibold text-slate-800 mb-1.5 text-sm flex items-start gap-2">
-                <span className="text-slate-300 shrink-0">—</span>
+                <span className="text-red-400 shrink-0 font-bold">✕</span>
                 {item.title}
               </h3>
-              <p className="text-slate-500 text-sm leading-relaxed pl-4">{item.body}</p>
+              <p className="text-slate-500 text-sm leading-relaxed pl-5">{item.body}</p>
             </div>
           ))}
         </div>
